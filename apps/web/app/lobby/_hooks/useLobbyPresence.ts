@@ -45,6 +45,11 @@ function applyChange(prev: PresenceRow[], payload: { eventType: string; new: Rec
   return [...prev, merged];
 }
 
+async function fetchPresence(): Promise<PresenceRow[]> {
+  const res = await fetch("/api/presence");
+  return res.json();
+}
+
 export function useLobbyPresence() {
   const [presence, setPresence] = useState<PresenceRow[]>([]);
 
@@ -53,15 +58,12 @@ export function useLobbyPresence() {
     let channel: ReturnType<typeof supabase.channel> | null = null;
 
     async function setup() {
-      // Initial fetch
-      const res = await fetch("/api/presence");
-      const data: PresenceRow[] = await res.json();
-      setPresence(sort(data));
+      setPresence(sort(await fetchPresence()));
 
-      // Ensure JWT is loaded before opening Realtime WebSocket
       const { data: { session } } = await supabase.auth.getSession();
       if (session) supabase.realtime.setAuth(session.access_token);
 
+      // Realtime catches INSERTs instantly; polling catches missed UPDATEs
       channel = supabase
         .channel("lobby-presence")
         .on(
@@ -78,7 +80,15 @@ export function useLobbyPresence() {
 
     setup();
 
-    return () => { if (channel) supabase.removeChannel(channel); };
+    // Fallback poll every 3s to catch UPDATE events Realtime may miss
+    const poll = setInterval(async () => {
+      setPresence(sort(await fetchPresence()));
+    }, 3000);
+
+    return () => {
+      clearInterval(poll);
+      if (channel) supabase.removeChannel(channel);
+    };
   }, []);
 
   return presence;
