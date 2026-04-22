@@ -6,8 +6,8 @@
     "clobby": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --clean --dts",
-    "dev": "tsup src/index.ts --format esm --watch"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "@clack/prompts": "^1.2.0",
