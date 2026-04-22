@@ -49,26 +49,36 @@ export function useLobbyPresence() {
   const [presence, setPresence] = useState<PresenceRow[]>([]);
 
   useEffect(() => {
-    // Initial fetch
-    fetch("/api/presence")
-      .then((r) => r.json())
-      .then((data: PresenceRow[]) => setPresence(sort(data)));
-
     const supabase = createSupabaseBrowserClient();
-    const channel = supabase
-      .channel("lobby-presence")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "presence" },
-        (payload) => {
-          setPresence((prev) =>
-            sort(applyChange(prev, payload as Parameters<typeof applyChange>[1]))
-          );
-        }
-      )
-      .subscribe();
+    let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    return () => { supabase.removeChannel(channel); };
+    async function setup() {
+      // Initial fetch
+      const res = await fetch("/api/presence");
+      const data: PresenceRow[] = await res.json();
+      setPresence(sort(data));
+
+      // Ensure JWT is loaded before opening Realtime WebSocket
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) supabase.realtime.setAuth(session.access_token);
+
+      channel = supabase
+        .channel("lobby-presence")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "presence" },
+          (payload) => {
+            setPresence((prev) =>
+              sort(applyChange(prev, payload as Parameters<typeof applyChange>[1]))
+            );
+          }
+        )
+        .subscribe();
+    }
+
+    setup();
+
+    return () => { if (channel) supabase.removeChannel(channel); };
   }, []);
 
   return presence;
