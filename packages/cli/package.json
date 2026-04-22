@@ -2,15 +2,22 @@
   "name": "@clobby/cli",
   "version": "0.0.1",
   "type": "module",
-  "bin": { "clobby": "./dist/index.js" },
+  "bin": {
+    "clobby": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm --clean --dts",
     "dev": "tsup src/index.ts --format esm --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@clack/prompts": "^1.2.0",
+    "@clobby/schemas": "workspace:^",
+    "commander": "^14.0.3",
+    "open": "10"
+  },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "tsup": "^8.0.0",
-    "typescript": "^5.4.0",
-    "@types/node": "^20.0.0"
+    "typescript": "^5.4.0"
   }
 }
