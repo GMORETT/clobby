@@ -62,4 +62,7 @@ export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
+  // Node runtime required — @supabase/ssr pulls in a transitive dep that
+  // references __dirname, which is not available in the Edge runtime.
+  runtime: "nodejs",
 };
