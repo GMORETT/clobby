@@ -4,6 +4,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useLobbyPresence } from "../_hooks/useLobbyPresence";
 import { PresenceGrid } from "./PresenceGrid";
+import { Chat } from "./Chat";
 
 interface Props {
   userId: string;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export function LobbyClient({ userId, username, avatarColor }: Props) {
-  const presence = useLobbyPresence();
+  const { presence, loading: presenceLoading } = useLobbyPresence();
   const router = useRouter();
 
   async function handleLogout() {
@@ -22,8 +23,9 @@ export function LobbyClient({ userId, username, avatarColor }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
-      <header className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 shrink-0">
+    <main className="h-screen bg-zinc-950 text-zinc-100 flex flex-col overflow-hidden">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-800 shrink-0">
         <span className="font-bold text-lg tracking-tight">Clobby</span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -44,7 +46,18 @@ export function LobbyClient({ userId, username, avatarColor }: Props) {
         </div>
       </header>
 
-      <PresenceGrid rows={presence} myUserId={userId} />
+      {/* Split layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Presence panel */}
+        <div className="flex-1 overflow-y-auto">
+          <PresenceGrid rows={presence} myUserId={userId} loading={presenceLoading} />
+        </div>
+
+        {/* Chat panel */}
+        <div className="w-80 shrink-0 flex flex-col overflow-hidden">
+          <Chat myUserId={userId} />
+        </div>
+      </div>
     </main>
   );
 }
