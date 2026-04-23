@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { WaitForFirstEvent } from "./_components/WaitForFirstEvent";
 
 export default async function InstallPage() {
   const supabase = await createSupabaseServerClient();
@@ -37,16 +38,14 @@ export default async function InstallPage() {
           </li>
         </ol>
 
-        <div className="space-y-2">
+        <div className="space-y-3 pt-2 border-t border-zinc-900">
+          <WaitForFirstEvent userId={user.id} />
           <Link
             href="/lobby"
-            className="inline-block text-zinc-400 hover:text-zinc-200 text-sm transition-colors"
+            className="inline-block text-zinc-600 hover:text-zinc-400 text-xs transition-colors"
           >
-            Try the lobby →
+            Skip — take me to the lobby
           </Link>
-          <p className="text-zinc-600 text-xs">
-            If you haven&apos;t connected yet, you&apos;ll come right back here.
-          </p>
         </div>
       </div>
     </main>
