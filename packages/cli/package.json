@@ -1,23 +1,37 @@
 {
-  "name": "@clobby/cli",
-  "version": "0.0.1",
+  "name": "@gmorett/clobby",
+  "version": "0.1.0",
+  "description": "CLI for Clobby — the lobby for people waiting on agents.",
   "type": "module",
   "bin": {
     "clobby": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@clack/prompts": "^1.2.0",
-    "@clobby/schemas": "workspace:^",
     "commander": "^14.0.3",
     "open": "10"
   },
   "devDependencies": {
+    "@clobby/schemas": "workspace:^",
     "@types/node": "^20.0.0",
     "tsup": "^8.0.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vitest": "^4.1.5"
   }
 }
