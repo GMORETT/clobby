@@ -30,6 +30,7 @@ export function installHooksIntoSettings(
 ): { updated: ClaudeSettings; eventsInstalled: string[] } {
   const events: Record<string, string> = {
     SessionStart: `${apiUrl}/api/hooks/session-start`,
+    UserPromptSubmit: `${apiUrl}/api/hooks/user-prompt-submit`,
     Stop: `${apiUrl}/api/hooks/stop`,
     Notification: `${apiUrl}/api/hooks/notification`,
   };
