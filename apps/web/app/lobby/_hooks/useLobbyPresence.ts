@@ -46,12 +46,19 @@ function applyChange(prev: PresenceRow[], payload: { eventType: string; new: Rec
 }
 
 async function fetchPresence(): Promise<PresenceRow[]> {
-  const res = await fetch("/api/presence");
-  return res.json();
+  try {
+    const res = await fetch("/api/presence");
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
 }
 
 export function useLobbyPresence() {
   const [presence, setPresence] = useState<PresenceRow[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
@@ -59,6 +66,7 @@ export function useLobbyPresence() {
 
     async function setup() {
       setPresence(sort(await fetchPresence()));
+      setLoading(false);
 
       const { data: { session } } = await supabase.auth.getSession();
       if (session) supabase.realtime.setAuth(session.access_token);
@@ -80,10 +88,11 @@ export function useLobbyPresence() {
 
     setup();
 
-    // Fallback poll every 3s to catch UPDATE events Realtime may miss
+    // Safety net poll every 15s — Realtime handles instant updates,
+    // this catches the rare case where the WebSocket drops/reconnects
     const poll = setInterval(async () => {
       setPresence(sort(await fetchPresence()));
-    }, 3000);
+    }, 15000);
 
     return () => {
       clearInterval(poll);
@@ -91,5 +100,5 @@ export function useLobbyPresence() {
     };
   }, []);
 
-  return presence;
+  return { presence, loading };
 }

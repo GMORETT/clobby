@@ -3,11 +3,32 @@
 import { AvatarBubble } from "./AvatarBubble";
 import type { PresenceRow } from "../_hooks/useLobbyPresence";
 
-export function PresenceGrid({ rows, myUserId }: { rows: PresenceRow[]; myUserId: string }) {
-  if (rows.length === 0) {
+export function PresenceGrid({
+  rows,
+  myUserId,
+  loading,
+}: {
+  rows: PresenceRow[];
+  myUserId: string;
+  loading?: boolean;
+}) {
+  if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <p className="text-zinc-600 text-sm">No one else is here yet.</p>
+        <p className="text-zinc-600 text-sm">Loading lobby…</p>
+      </div>
+    );
+  }
+  if (rows.length === 0) {
+    return (
+      <div className="flex-1 flex items-center justify-center px-6">
+        <div className="text-center max-w-sm space-y-2">
+          <p className="text-zinc-400 text-sm">No one else is here yet.</p>
+          <p className="text-zinc-600 text-xs">
+            Run <code className="text-indigo-400">npx @gmorett/clobby install</code> on another machine
+            and kick off an agent to see your dot show up.
+          </p>
+        </div>
       </div>
     );
   }
