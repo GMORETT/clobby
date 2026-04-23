@@ -1,10 +1,14 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function InstallPage() {
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const username = user?.user_metadata?.user_name ?? "there";
+
+  if (!user) redirect("/login?next=/install");
+
+  const username = user.user_metadata?.user_name ?? "there";
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center px-4">
