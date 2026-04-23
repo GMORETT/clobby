@@ -25,7 +25,7 @@ export function PresenceGrid({
         <div className="text-center max-w-sm space-y-2">
           <p className="text-zinc-400 text-sm">No one else is here yet.</p>
           <p className="text-zinc-600 text-xs">
-            Run <code className="text-indigo-400">npx @gmorett/clobby install</code> on another machine
+            Run <code className="text-indigo-400">npm i -g @gmorett/clobby && clobby install</code> on another machine
             and kick off an agent to see your dot show up.
           </p>
         </div>

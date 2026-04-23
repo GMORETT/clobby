@@ -8,7 +8,8 @@ who's stuck, who's idle.
 ## Install
 
 ```sh
-npx @gmorett/clobby install
+npm install -g @gmorett/clobby
+clobby install
 ```
 
 This:
@@ -55,7 +56,7 @@ Only events are sent — never prompt content, never file contents, never code.
 ## Uninstall
 
 ```sh
-npx @gmorett/clobby uninstall
+clobby uninstall
 ```
 
 Removes the daemon, startup registration, Claude Code hooks, and

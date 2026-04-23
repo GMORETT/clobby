@@ -24,7 +24,7 @@ export default async function InstallPage() {
             <p className="text-zinc-200">Run this command in your terminal:</p>
             <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 font-mono text-sm">
               <span className="text-zinc-500 select-none">$</span>
-              <span className="flex-1 text-zinc-100">npx @clobby/cli install</span>
+              <span className="flex-1 text-zinc-100">npm install -g @gmorett/clobby && clobby install</span>
             </div>
           </li>
           <li>

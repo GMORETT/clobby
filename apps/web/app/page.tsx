@@ -70,7 +70,7 @@ export default async function LandingPage() {
               body={
                 <>
                   One command:{" "}
-                  <code className="text-indigo-400 text-sm">npx @gmorett/clobby install</code>
+                  <code className="text-indigo-400 text-sm">npm i -g @gmorett/clobby && clobby install</code>
                 </>
               }
             />
