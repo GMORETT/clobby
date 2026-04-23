@@ -8,6 +8,15 @@ export default async function LobbyPage() {
 
   if (!user) redirect("/login");
 
+  // Gate: lobby access requires at least one presence event ever.
+  // Prevents drive-by GitHub signins from filling the lobby with ghost users
+  // who never actually installed the CLI.
+  const { count: presenceCount } = await supabase
+    .from("presence")
+    .select("user_id", { count: "exact", head: true })
+    .eq("user_id", user.id);
+  if (!presenceCount) redirect("/install");
+
   const { data: profile } = await supabase
     .from("users")
     .select("id, username, avatar_color")

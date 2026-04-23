@@ -33,16 +33,21 @@ export default async function InstallPage() {
           </li>
           <li>
             <span className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">Step 3</span>
-            <p className="text-zinc-200 mt-1">You&apos;re in! Start Claude Code and watch your status update live.</p>
+            <p className="text-zinc-200 mt-1">Start a Claude Code session. Your first hook event unlocks the lobby.</p>
           </li>
         </ol>
 
-        <Link
-          href="/lobby"
-          className="inline-block text-zinc-400 hover:text-zinc-200 text-sm transition-colors"
-        >
-          I&apos;ve installed it, take me to the lobby →
-        </Link>
+        <div className="space-y-2">
+          <Link
+            href="/lobby"
+            className="inline-block text-zinc-400 hover:text-zinc-200 text-sm transition-colors"
+          >
+            Try the lobby →
+          </Link>
+          <p className="text-zinc-600 text-xs">
+            If you haven&apos;t connected yet, you&apos;ll come right back here.
+          </p>
+        </div>
       </div>
     </main>
   );
